@@ -1,5 +1,5 @@
-export const getComments = async () => {
-    return [
+
+const comments = [
         {
             id: '1',
             userName: 'Ericka',
@@ -34,6 +34,12 @@ export const getComments = async () => {
         }, 
 
     ]
+    let stringified = JSON.stringify(comments)
+    window.localStorage.setItem('commentList', stringified)
+
+export const getComments = async () => {
+    let data = localStorage.getItem("commentList")
+    return JSON.parse(data)
 }
 
 export const addComment = async (text, parentCommentID = null) => {

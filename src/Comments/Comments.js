@@ -11,7 +11,12 @@ const Comments = () => {
     }, [])
     useEffect(() => {
         getComments().then(data => {
-            setComments(data)
+            if(data){
+                setComments(data)
+            }else{
+                setComments([])
+            }
+            
         })
     }, [])
 
@@ -26,9 +31,10 @@ const Comments = () => {
 
     // adding comment handler
     const handleComment = (text, parentCommentID) => {
-        console.log('comment', text, parentCommentID)
         addComment(text, parentCommentID).then((comment) => {
             setComments([comment, ...comments]);
+            let stringified = JSON.stringify([comment, ...comments])
+            window.localStorage.setItem("commentList", stringified)
             setSelectedComment(null)
         })
     }
@@ -37,8 +43,9 @@ const Comments = () => {
     const deleteComment = (id) => {
         deleteCommentApi(id).then(() => {
             const updatedComments = comments.filter((comment) => comment.id !== id);
+            let stringified = JSON.stringify(updatedComments)
+            window.localStorage.setItem("commentList", stringified)
             setComments(updatedComments)
-
         })
     }
 
@@ -51,6 +58,8 @@ const Comments = () => {
                 return comment
             })
             setComments(updatedComments)
+            let stringified = JSON.stringify(updatedComments)
+            window.localStorage.setItem("commentList", stringified)
             setSelectedComment(null)
         })
     }
