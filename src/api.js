@@ -9,14 +9,6 @@ export const getComments = async () => {
             createdAt: "2023-03-07T19:48:55+0000"
         },
         {
-            id: '2',
-            userName: 'Laurin',
-            parentCommentID: null,
-            userID: 2,
-            body: "Hi, Im Laurin!",
-            createdAt: "2023-03-07T19:49:55+0000"
-        },
-        {
             id: '3',
             userName: 'Taylor',
             parentCommentID: null,
@@ -39,16 +31,7 @@ export const getComments = async () => {
             userID: 2,
             body: "Pizza's my passion!",
             createdAt: "2023-03-07T19:51:55+0000"
-        },
-        {
-            id: '6',
-            userName: 'Danny',
-            parentCommentID: '1',
-            userID: 5,
-            body: "Hey everyone, Im Danny.",
-            createdAt: "2023-03-07T19:49:55+0000"
-        },
-       
+        }, 
 
     ]
 }
