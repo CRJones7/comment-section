@@ -6,19 +6,30 @@ const Comments = () => {
     const [comments, setComments] = useState([])
     const [selectedComment, setSelectedComment] = useState(null)
 
+    const storeData = (comments) => {
+            setComments(comments)
+            let stringified = JSON.stringify(comments)
+            window.localStorage.setItem("commentList", stringified)
+            setSelectedComment(null)
+    }
+
     useEffect(() => {
-        
+        fetchData()
     }, [])
-    useEffect(() => {
-        getComments().then(data => {
+
+    const fetchData = async () => {
+        try{
+            let data = await getComments()
             if(data){
                 setComments(data)
             }else{
                 setComments([])
             }
-            
-        })
-    }, [])
+        }catch{
+            console.log("Error Fetching Data")
+        }
+        
+    }
 
     //generate array of all parent comments
     const parentComments = comments.length > 0 && comments.filter(
@@ -30,38 +41,44 @@ const Comments = () => {
     }
 
     // adding comment handler
-    const handleComment = (text, parentCommentID) => {
-        addComment(text, parentCommentID).then((comment) => {
-            setComments([comment, ...comments]);
-            let stringified = JSON.stringify([comment, ...comments])
-            window.localStorage.setItem("commentList", stringified)
-            setSelectedComment(null)
-        })
+    const handleComment = async (text, parentCommentID) => {
+        try{
+            let resp = await addComment(text, parentCommentID)
+            storeData([resp, ...comments])
+        }catch{
+            console.log("Error Adding Comment")
+        }
+        
     }
 
     // delete
-    const deleteComment = (id) => {
-        deleteCommentApi(id).then(() => {
+    const deleteComment = async (id) => {
+        try{
+            await deleteCommentApi(id)
+
             const updatedComments = comments.filter((comment) => comment.id !== id);
-            let stringified = JSON.stringify(updatedComments)
-            window.localStorage.setItem("commentList", stringified)
-            setComments(updatedComments)
-        })
+            storeData(updatedComments)
+            
+        }catch{
+            console.log("Error deleting comment")
+        }
+        
     }
 
-    const editComment = (text, id) => {
-        updateComment().then(() => {
+    const editComment = async (text, id) => {
+        try{
+            await updateComment()
             const updatedComments = comments.map((comment) => {
                 if(comment.id === id){
                     return {...comment, body: text}
                 }
                 return comment
             })
-            setComments(updatedComments)
-            let stringified = JSON.stringify(updatedComments)
-            window.localStorage.setItem("commentList", stringified)
-            setSelectedComment(null)
-        })
+            
+            storeData(updatedComments)
+        }catch{
+            console.log("Error saving Changes ")
+        } 
     }
 
     return(

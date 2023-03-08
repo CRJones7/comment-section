@@ -62,9 +62,9 @@ export const addComment = async (text, parentCommentID = null) => {
 }
 
 export const deleteCommentApi = async () => {
-    return
+    return {}
 }
 
 export const updateComment = async () => {
-    return
+    return {}
 }   
