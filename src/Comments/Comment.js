@@ -12,14 +12,16 @@ const Comment = ({
     setSelectedComment, 
     handleComment,
     editComment,
+    filterdReplies,
 }) => {
-
+    
     const {id, userName, parentCommentID, userID, body, createdAt} = comment
 
     const canEditAndDelete = currentUser === userID
     const replying = selectedComment && selectedComment.type === "reply" && selectedComment.id === id
-    const editing =  selectedComment && selectedComment.type === "edit" && selectedComment.id === id
-    const replyId = parentCommentID ? parentCommentID : id
+    const editing = selectedComment && selectedComment.type === "edit" && selectedComment.id === id
+    const replyId = parentCommentID && !isReply ? parentCommentID : id
+
   return(
     <>
     <div className={!isReply ? "commentBlock" : 'responseBlock'}>
@@ -37,13 +39,13 @@ const Comment = ({
                 /> 
         }
         <div className="commentAction">
-            {!isReply && 
+           
             <div 
             className="commentActionBtn"
             onClick={() => setSelectedComment({id: id, type: 'reply'})}
             >
                 Reply
-            </div>}
+            </div>
             {canEditAndDelete && 
             <div 
             className="commentActionBtn"
@@ -61,7 +63,10 @@ const Comment = ({
         {replying && 
             <CommentForm 
                 label="Reply" 
-                handleSubmit={(text) => handleComment(text, replyId)}/> }
+                handleSubmit={(text) => handleComment(text, replyId)}
+                canCancel
+                handleCancel={() => setSelectedComment(null)}
+                /> }
       </div>
     </div>
     <div className="responseBlocks">
@@ -69,12 +74,13 @@ const Comment = ({
         <div>
             {replies.map((resp, idx) => {
                 let indent = (idx * 4) + 10
+                
              return(
                 <div key={resp.id} style={{marginLeft: indent}}>
                    <Comment 
                         comment={resp} 
                         key={resp.id} 
-                        replies={[]} 
+                        replies={filterdReplies(resp.id)} 
                         isReply={true} 
                         currentUser={currentUser} 
                         deleteComment={deleteComment}
@@ -82,7 +88,9 @@ const Comment = ({
                         selectedComment={selectedComment}
                         setSelectedComment={setSelectedComment}
                         handleSubmit={handleComment}
+                        handleComment={handleComment}
                         parentCommentID={id}
+                        filterdReplies={filterdReplies}
                         />
                 </div> 
                   )

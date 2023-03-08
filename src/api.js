@@ -32,6 +32,14 @@ const comments = [
             body: "Pizza's my passion!",
             createdAt: "2023-03-07T19:51:55+0000"
         }, 
+        {
+            id: '6',
+            userName: 'Abigail',
+            parentCommentID: '4',
+            userID: 5,
+            body: "What's your favorite kind?",
+            createdAt: "2023-03-07T19:58:55+0000"
+        }
 
     ]
 

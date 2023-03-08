@@ -58,7 +58,7 @@ const Comments = () => {
 
             const updatedComments = comments.filter((comment) => comment.id !== id);
             storeData(updatedComments)
-            
+
         }catch{
             console.log("Error deleting comment")
         }
@@ -99,6 +99,7 @@ const Comments = () => {
                     selectedComment={selectedComment}
                     setSelectedComment={setSelectedComment}
                     handleComment={handleComment}
+                    filterdReplies={filterdReplies}
                     />
             )
         })}
